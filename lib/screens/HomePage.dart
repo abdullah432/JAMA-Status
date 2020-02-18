@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:in_out_board/screens/login.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -11,32 +9,33 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  final flutterWebviewPlugin = new FlutterWebviewPlugin();
+
+  @override
+  void initState() {
+    super.initState();
+    flutterWebviewPlugin.close();
+  }
+
+  @override
+  void dispose() {
+
+    flutterWebviewPlugin.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: RaisedButton(
-          onPressed: () {
-            logOutUser();
-          },
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          color: Color.fromRGBO(26, 119, 186, 1),
-          child: Text(
-            'Log out',
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-      ),
-    );
+    return Container(
+          margin: const EdgeInsets.only(top: 0.0),
+          child: SafeArea(
+          top: true,
+          child: WebviewScaffold(
+      url: 'https://apps.brownbearsw.com/iobee/jamanv/login',
+      withJavascript: true,
+    // headers: {'Authorization': 'Basic $username:$password'}
+    )));
   }
 
-  void logOutUser() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setBool('islogIn', false);
-
-     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-        return Login();
-      }));
-  }
 }
